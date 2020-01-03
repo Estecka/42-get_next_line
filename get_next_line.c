@@ -46,15 +46,20 @@ int				get_next_line(int fd, char **line)
 	size_t	i;
 	short	err;
 
-	if (NULL == (line = malloc(BUFFER_SIZE)))
+	if (NULL == (*line = malloc(BUFFER_SIZE)))
 		return (-1);
 	linesize = BUFFER_SIZE;
 	i = 0;
-	while(0 > (err = read(fd, line + i, BUFFER_SIZE)))
+	while (i < BUFFER_SIZE)
+	{
+		(*line)[i++] = 0;
+	}
+	i = 0;
+	while(0 > (err = read(fd, (*line) + i, BUFFER_SIZE)))
 	{
 		i++;
-		if (i == linesize)
-			remalloc(line, &linesize);
+		if (i == linesize && !remalloc(line, &linesize))
+			return (-1);
 		if ((*line)[i - 1] == '\n')
 			break;
 	}
