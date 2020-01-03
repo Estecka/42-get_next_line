@@ -55,13 +55,14 @@ int				get_next_line(int fd, char **line)
 		(*line)[i++] = 0;
 	}
 	i = 0;
-	while(0 > (err = read(fd, (*line) + i, BUFFER_SIZE)))
+	while(0 < (err = read(fd, (*line) + i, 1)))
 	{
+		if ((*line)[i] == '\n')
+			break;
 		i++;
 		if (i == linesize && !remalloc(line, &linesize))
 			return (-1);
-		if ((*line)[i - 1] == '\n')
-			break;
 	}
+	(*line)[i] = '\0';
 	return err;
 }
