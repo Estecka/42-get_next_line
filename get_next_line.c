@@ -6,34 +6,57 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:19:44 by abaur             #+#    #+#             */
-/*   Updated: 2020/01/03 10:55:04 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/03 16:28:13 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+#include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
 
-int		get_next_line(int fd, char **line)
-{
-	static char	buffer[BUFFER_SIZE];
-	int			i;
-	int			err;
+static short	remalloc(char **result, size_t *size){
+	char	*src;
+	size_t	srclen;
+	size_t	i;
 
-	err = 1;
-	i = 0;
-	while(i < BUFFER_SIZE)
-		buffer[i++] = '\0';
-	i = 0;
-	while (i < (BUFFER_SIZE - 2) &&  0 < err)
+	src = *result;
+	srclen = *size;
+	*result = malloc (*size);
+	if (!*result)
+		return (0);
+	*size += BUFFER_SIZE;
+	i=0;
+	while(i < *size + BUFFER_SIZE)
 	{
-		err = read(fd, &buffer[i], 1);
+		if (i < srclen)
+			(*result)[i] = src[i];
+		else
+			(*result)[i] = '\0';
 		i++;
-		if (buffer[i-1] == '\n' || buffer[i-1] == EOF)
+	}
+	free(src);
+	return 1;
+}
+
+int				get_next_line(int fd, char **line)
+{
+	size_t	linesize;
+	size_t	i;
+	short	err;
+
+	if (NULL == (line = malloc(BUFFER_SIZE)))
+		return (-1);
+	linesize = BUFFER_SIZE;
+	i = 0;
+	while(0 > (err = read(fd, line + i, BUFFER_SIZE)))
+	{
+		i++;
+		if (i == linesize)
+			remalloc(line, &linesize);
+		if ((*line)[i - 1] == '\n')
 			break;
 	}
-
-	*line = (char*)buffer;
-	return (err > 0 ? 1 : err);
+	return err;
 }
