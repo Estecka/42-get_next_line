@@ -6,7 +6,7 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:19:44 by abaur             #+#    #+#             */
-/*   Updated: 2020/01/02 14:59:12 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/03 10:55:04 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@ int		get_next_line(int fd, char **line)
 	{
 		err = read(fd, &buffer[i], 1);
 		i++;
-		if (buffer[i] == '\n' || buffer[i] == EOF)
+		if (buffer[i-1] == '\n' || buffer[i-1] == EOF)
 			break;
 	}
-		i++;
 
 	*line = (char*)buffer;
 	return (err > 0 ? 1 : err);
