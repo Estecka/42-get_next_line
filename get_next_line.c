@@ -6,7 +6,7 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:19:44 by abaur             #+#    #+#             */
-/*   Updated: 2020/01/03 16:28:13 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/06 11:23:02 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int				get_next_line(int fd, char **line)
 		if ((*line)[i] == '\n')
 			break;
 		i++;
-		if (i == linesize && !remalloc(line, &linesize))
+		if (i == (linesize - 1) && !remalloc(line, &linesize))
 			return (-1);
 	}
 	(*line)[i] = '\0';
