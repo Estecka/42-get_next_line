@@ -6,7 +6,7 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:20:24 by abaur             #+#    #+#             */
-/*   Updated: 2019/12/04 16:23:15 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/06 15:18:46 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 # define GET_NEXT_LINE_H
 
 # define BUFFER_SIZE 32
+
+typedef s_gnlbuffer t_gnlbuffer;
+struct s_gnlbuffer {
+	t_gnlbuffer *next;
+	char **content;
+};
 
 int		get_next_line(int fd, char **line);
 
