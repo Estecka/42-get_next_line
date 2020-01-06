@@ -6,7 +6,7 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:19:44 by abaur             #+#    #+#             */
-/*   Updated: 2020/01/06 11:23:02 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/06 11:28:25 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,20 @@
 #include <unistd.h>
 #include <stdio.h>
 
-static short	remalloc(char **result, size_t *size){
+static short	remalloc(char **result, size_t *size)
+{
 	char	*src;
 	size_t	srclen;
 	size_t	i;
 
 	src = *result;
 	srclen = *size;
-	*result = malloc (*size);
+	*result = malloc(*size);
 	if (!*result)
 		return (0);
 	*size += BUFFER_SIZE;
-	i=0;
-	while(i < *size + BUFFER_SIZE)
+	i = 0;
+	while (i < *size + BUFFER_SIZE)
 	{
 		if (i < srclen)
 			(*result)[i] = src[i];
@@ -37,7 +38,7 @@ static short	remalloc(char **result, size_t *size){
 		i++;
 	}
 	free(src);
-	return 1;
+	return (1);
 }
 
 int				get_next_line(int fd, char **line)
@@ -55,14 +56,14 @@ int				get_next_line(int fd, char **line)
 		(*line)[i++] = 0;
 	}
 	i = 0;
-	while(0 < (err = read(fd, (*line) + i, 1)))
+	while (0 < (err = read(fd, (*line) + i, 1)))
 	{
 		if ((*line)[i] == '\n')
-			break;
+			break ;
 		i++;
 		if (i == (linesize - 1) && !remalloc(line, &linesize))
 			return (-1);
 	}
 	(*line)[i] = '\0';
-	return err;
+	return (err);
 }
