@@ -6,7 +6,7 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:19:44 by abaur             #+#    #+#             */
-/*   Updated: 2020/01/06 15:20:12 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/07 10:37:20 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,29 @@
 #include <stdio.h>
 
 /*
-** Computes the total lenght of the chained buffers,
-** and allocates a string capable holding it all.
+** Allocates a string capable of holding the entirety of the chained buffers,
+** plus a Null terminator.
 */
 
-static size_t	bufmalloc(t_gnlbuffer *first, char **result)
+static char	*bufmalloc(t_gnlbuffer *first)
 {
-	int 		len;
 	t_gnlbuffer	*last;
-	size_t			i;
+	size_t		len;
+	size_t		i;
 
-	len = 0;
-	*last = first;
-	while((*last = last*->next))
-		len++;
-	len *= BUFFER_SIZE;
+	i = 0;
+	last = first;
+	while(last->next)
+	{
+		last = last->next;
+		i++;
+	}
+	len = i * BUFFER_SIZE;
 	i = 0;
 	while(last->content[i] && last->content[i] != '\n')
 		i++;
 	len += i;
-	**result = malloc(len);
-	return (len);
+	return (malloc(len + 1));
 }
 
 int	get_next_line(int fd, char **line)
