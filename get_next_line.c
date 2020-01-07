@@ -6,7 +6,7 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:19:44 by abaur             #+#    #+#             */
-/*   Updated: 2020/01/07 14:30:06 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/07 15:57:28 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,28 +46,28 @@ static char	*bufmalloc(t_gnlbuffer *first)
 
 /*
 ** Merge all chained buffers into a single string, and frees the buffer.
-** Buffers are freed even if the allocation fails.
-** @param t_gnlbuffer* first The first link of the buffer chain.
-** @return The concatenated string, or NULL if the allocation fails.
+** If the destination is NULL, the buffers are freed anyway.
+** @param t_gnlbuffer* first The first link of the buffer chain. May be NULL.
+** @param char** dt	The destination string.
+** If non-NULL, the destination is assumed large enough to fit the buffer in.
+** @return dst
 */
 
-static char	*concatbuff(t_gnlbuffer *first)
+static char	*flushbuff(t_gnlbuffer *first, char *dst)
 {
 	t_gnlbuffer *current;
 	t_gnlbuffer *prev;
-	char		*result;
 	char		*cursor;
 	size_t		i;
 
-	result = bufmalloc(current);
 	i = 0;
-	cursor = result;
+	cursor = dst;
 	current = first;
 	while (current && current->content[i])
 	{
-		if (result)
+		if (dst)
 			*(cursor++) = current->content[i++];
-		if (!result || i == BUFFER_SIZE)
+		if (!dst || i == BUFFER_SIZE)
 		{
 			i = 0;
 			prev = current;
@@ -75,9 +75,9 @@ static char	*concatbuff(t_gnlbuffer *first)
 			free(prev);
 		}
 	}
-	if (result)
+	if (dst)
 		*cursor = '\0';
-	return (result);
+	return (dst);
 }
 
 /*
@@ -107,6 +107,37 @@ int			get_next_char(int fd, char *dst)
 	}
 	*dst = buffer[offset++];
 	return (1);
+}
+
+/*
+** Appends the given character to the chained buffer.
+** Allocates and binds more links as needed.
+** @param t_gnlbuffer** current Outputs the pointer to the current buffer.
+** May be passed NULL for initialization.
+** @param char value The character value to append;
+** @return
+** 	 0 OK
+** 	-1 Allocation failed.
+*/
+
+static int	bufappend(t_gnlbuffer **current, char value)
+{
+	t_gnlbuffer *next;
+
+	if (*current == NULL || (*current)->size == BUFFER_SIZE)
+	{
+		next = malloc(sizeof(t_gnlbuffer));
+		if (next == NULL)
+			return (-1);
+		next = NULL;
+		next->size = 0;
+		if (*current)
+			(*current)->next = next;
+		*current = next;
+	}
+	(*current)->content[(*current)->size] = value;
+	(*current)->size++;
+	return (0);
 }
 
 int	get_next_line(int fd, char **line)
