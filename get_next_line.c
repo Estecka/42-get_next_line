@@ -140,7 +140,25 @@ static int	bufappend(t_gnlbuffer **current, char value)
 	return (0);
 }
 
-int	get_next_line(int fd, char **line)
+int			get_next_line(int fd, char **line)
 {
-	return (0);
+	t_gnlbuffer *chainedbuffer;
+	t_gnlbuffer *current;
+	char		value;
+	int			err;
+
+	chainedbuffer = NULL;
+	current = NULL;
+	while (0 < (err = get_next_char(fd, &value)))
+	{
+		if (value == '\n' || value == EOF)
+			value = '\0';
+		if (bufappend(&current, value) < 0)
+			return (-1 | (int)flushbuff(chainedbuffer, NULL));
+	}
+	if (err < 0)
+		*line = flushbuff(chainedbuffer, NULL);
+	else
+		*line = flushbuff(chainedbuffer, bufmalloc(chainedbuffer));
+	return (line ? err : -1);
 }
