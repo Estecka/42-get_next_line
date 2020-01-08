@@ -6,7 +6,7 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:19:44 by abaur             #+#    #+#             */
-/*   Updated: 2020/01/07 15:57:28 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/07 16:17:40 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int			get_next_char(int fd, char *dst)
 {
 	static char		buffer[BUFFER_SIZE] = { 0 };
 	static size_t	offset = BUFFER_SIZE;
-	static int		readsize = BUFFER_SIZE;
+	static size_t	readsize = BUFFER_SIZE;
 
 	if (offset >= readsize)
 	{
@@ -129,7 +129,7 @@ static int	bufappend(t_gnlbuffer **current, char value)
 		next = malloc(sizeof(t_gnlbuffer));
 		if (next == NULL)
 			return (-1);
-		next = NULL;
+		next->next = NULL;
 		next->size = 0;
 		if (*current)
 			(*current)->next = next;
@@ -155,6 +155,8 @@ int			get_next_line(int fd, char **line)
 			value = '\0';
 		if (bufappend(&current, value) < 0)
 			return (-1 | (int)flushbuff(chainedbuffer, NULL));
+		if (value == '\0')
+			break ;
 	}
 	if (err < 0)
 		*line = flushbuff(chainedbuffer, NULL);
