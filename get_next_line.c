@@ -151,10 +151,12 @@ int			get_next_line(int fd, char **line)
 	current = NULL;
 	while (0 < (err = get_next_char(fd, &value)))
 	{
-		if (value == '\n' || value == EOF)
+		if (value == '\n' || value == (char)EOF)
 			value = '\0';
 		if (bufappend(&current, value) < 0)
 			return (-1 | (int)flushbuff(chainedbuffer, NULL));
+		if (!chainedbuffer)
+				chainedbuffer = current;
 		if (value == '\0')
 			break ;
 	}
