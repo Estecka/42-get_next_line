@@ -149,7 +149,7 @@ int			get_next_line(int fd, char **line)
 
 	chainedbuffer = NULL;
 	current = NULL;
-	while (0 < (err = get_next_char(fd, &value)))
+	while (0 <= (err = get_next_char(fd, &value)))
 	{
 		if (value == '\n' || value == (char)EOF)
 			value = '\0';
