@@ -6,7 +6,7 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:19:44 by abaur             #+#    #+#             */
-/*   Updated: 2020/01/07 16:17:40 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/13 11:08:30 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ int			get_next_line(int fd, char **line)
 		if (bufappend(&current, value) < 0)
 			return (-1 | (int)flushbuff(chainedbuffer, NULL));
 		if (!chainedbuffer)
-				chainedbuffer = current;
+			chainedbuffer = current;
 		if (value == '\0')
 			break ;
 	}
