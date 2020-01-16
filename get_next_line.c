@@ -6,7 +6,7 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:19:44 by abaur             #+#    #+#             */
-/*   Updated: 2020/01/16 10:46:23 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/16 11:07:55 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static char	*flushbuff(t_gnlbuffer *first, char *dst)
 
 int			get_next_char(int fd, char *dst)
 {
-	static char	buffer[BUFFER_SIZE];
+	static char	buffer[BUFFER_SIZE] = { BUFFER };
 	static int	offset = BUFFER_SIZE;
 	static int	readsize = BUFFER_SIZE;
 
