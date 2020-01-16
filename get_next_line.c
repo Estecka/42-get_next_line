@@ -6,7 +6,7 @@
 /*   By: abaur <abaur@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 16:19:44 by abaur             #+#    #+#             */
-/*   Updated: 2020/01/13 15:36:30 by abaur            ###   ########.fr       */
+/*   Updated: 2020/01/16 10:35:20 by abaur            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,8 @@ int			get_next_line(int fd, char **line)
 	char		value;
 	int			err;
 
+	if (!line || BUFFER_SIZE < 1)
+		return (-1);
 	chainedbuffer = NULL;
 	current = NULL;
 	while (0 <= (err = get_next_char(fd, &value)))
